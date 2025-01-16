@@ -94,7 +94,19 @@ ssh-keygen
 
 Generation public/private rsa key pair.
 Enter the file in wich to save the key (/home/usuario/.ssh/id_rsa): //Lugar en el que se almacena la clave (lugar por defecto)
-Enter passphrase (empty for no passphrase):                         //
+Enter passphrase (empty for no passphrase):                         //Contraseña de la clave
 ```
 
 ![alt text](image.png)
+
+Ahora tenemos creadas las claves `ssh` en el directorio `~/.ssh/`, tanto la pública como la privada, ahora hemos de copiar la clave pública al nodo remoto.
+
+Con esto podemos iniciar sesión `ssh` en el servidor sin necesidad de contraseña.
+
+``` cmd
+ssh-copy-id -i ~/.ssh/ide_rsa.pub usuario@10.0.0.2
+```
+
+`~/.ssh/ide_rsa.pub` es la ruta a la clave pública generada anteriormente.
+
+`usuario@10.0.0.2` es el usuario y dirección IP del nodo remoto.
