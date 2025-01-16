@@ -4,22 +4,26 @@
 - [Despliegues con Ansible](#despliegues-con-ansible)
   - [Índice](#índice)
   - [Introducción](#introducción)
-    - [Instalación de Ansible](#instalación-de-ansible)
+  - [Generación de claves ssh](#generación-de-claves-ssh)
+  - [Instalación de Ansible](#instalación-de-ansible)
   - [Playbooks](#playbooks)
   - [Creación de un playbook](#creación-de-un-playbook)
   - [Apendices no explicados en el curso](#apendices-no-explicados-en-el-curso)
     - [Como habilitar el ssh en ubuntu](#como-habilitar-el-ssh-en-ubuntu)
     - [Fallo al conectar con ssh](#fallo-al-conectar-con-ssh)
+  - [Recursos](#recursos)
+    - [Intalar Ansible](#intalar-ansible)
+    - [Habilitar ssh](#habilitar-ssh)
 
 ## Introducción
 
 Ansible es una herramienta de automatización de sistemas de código abierto que permite a los administradores de sistemas y desarrolladores automatizar la configuración y el despliegue de aplicaciones y servicios en entornos de TI.
 
-Ansible utiliza un modelo de configuración basado en **playbooks**, que son archivos de texto que describen las acciones que se deben realizar en un sistema o grupo de sistemas.
+Ansible utiliza un modelo de configuración basado en [playbooks](#playbooks), que son archivos de texto que describen las acciones que se deben realizar en un sistema o grupo de sistemas.
 
 No necesita instalar agentes en los sistemas que se van a gestionar, lo que lo hace una herramienta muy ligera y fácil de usar.
 
-### Instalación de Ansible
+## Generación de claves ssh
 
 Para instalar Ansible en Ubuntu primero debemos de generar un par de claves `ssh`:
 
@@ -41,13 +45,15 @@ ssh-copy-id -i ~/.ssh/id_rsa.pub usuario@10.0.0.2
 
 Esto copiará la clave pública a la máquina remota y la agregará a la lista de claves autorizadas.
 
+## Instalación de Ansible
+
 ## Playbooks
 
 ## Creación de un playbook
 
 ## Apendices no explicados en el curso
 
-### [Como habilitar el ssh en ubuntu](https://es.dade2.net/como-habilitar-el-servidor-ssh-en-ubuntu-22-04/)
+### [Como habilitar el ssh en ubuntu](#habilitar-ssh)
 
 Primero deberemos activar el ssh en el servidor al que queremos conectarnos:
 
@@ -74,3 +80,9 @@ sudo ufw allow 22/tcp
 ```
 
 ### Fallo al conectar con ssh
+
+## Recursos
+
+### [Intalar Ansible](https://www.digitalocean.com/community/tutorials/how-to-install-and-configure-ansible-on-ubuntu-20-04-es)
+
+### [Habilitar ssh](https://es.dade2.net/como-habilitar-el-servidor-ssh-en-ubuntu-22-04/)
