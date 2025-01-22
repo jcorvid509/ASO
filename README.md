@@ -5,4 +5,4 @@
 
  Administración de Sistemas Operativos
 
-## Curso de Ansible <a href="/Ansible/ansible.md"><img src="https://github.com/jcorvid509/.resGen/blob/main/_link.svg" width="30"></a>
+## [Curso de Ansible](/Ansible/ansible.md)
