@@ -4,6 +4,11 @@
 - [Despliegues con Ansible](#despliegues-con-ansible)
   - [Índice](#índice)
   - [Introducción](#introducción)
+  - [Requisitos previos](#requisitos-previos)
+  - [Nodo de Control de Ansible](#nodo-de-control-de-ansible)
+    - [Usuario no Root Sudo](#usuario-no-root-sudo)
+    - [Claves SSH](#claves-ssh)
+  - [Hosts de Ansible](#hosts-de-ansible)
   - [Generación de claves ssh](#generación-de-claves-ssh)
   - [Instalación de Ansible](#instalación-de-ansible)
   - [Playbooks](#playbooks)
@@ -23,6 +28,31 @@ Ansible utiliza un modelo de configuración basado en [playbooks](#playbooks), q
 
 No necesita instalar agentes en los sistemas que se van a gestionar, lo que lo hace una herramienta muy ligera y fácil de usar.
 
+## Requisitos previos
+
+Antes de instalar ansible, deberemos de tener lo siguiente:
+
+- [Nodo de control de Ansible](#nodo-de-control-de-ansible)
+  - [Un usuario no root con privilegios sudo](#usuario-no-root-sudo)
+  - [Un par de claves `ssh`](#claves-ssh)
+- `Hosts de Ansible`
+  - Clave pública `ssh` del nodo de control de Ansible
+
+## Nodo de Control de Ansible
+
+Maquina usada para conectar a los [Hosts de Ansible](#hosts-de-ansible), y controlarlos a traves de `ssh`.
+
+Este **Nodo de Control**, debe contener lo siguiente:
+
+### Usuario no Root Sudo
+
+### Claves SSH
+
+## Hosts de Ansible
+
+
+------------
+------------
 ## Generación de claves ssh
 
 Para instalar Ansible en Ubuntu primero debemos de generar un par de claves `ssh`:
