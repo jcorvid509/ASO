@@ -1,0 +1,149 @@
+![](https://github.com/jcorvid509/.resGen/blob/main/_bannerD.png#gh-dark-mode-only)
+![](https://github.com/jcorvid509/.resGen/blob/main/_bannerL.png#gh-light-mode-only)
+
+<a href="/README.md"><img src="https://github.com/jcorvid509/.resGen/blob/main/_home.svg" width="30"></a>
+
+# PlayBooks de Ansible
+
+## Estructura de los PlayBooks de Ansible
+
+```
+main.yml
+inventory/
+    hosts
+group_vars/
+    all
+roles/
+    common/
+        tasks/
+        handlers/
+        files/
+        templates/
+        vars/
+        defaults/
+        meta/
+    webservers/
+        tasks/
+        defaults
+```
+
+El fichero `main.yml` es el archivo principal de Ansible
+
+## Inventario
+
+Conjunto de maquinas en las que Ansible se ejecutará y que comparten **roles** o **tareas**
+
+```ini
+[webservers]            # nombre del grupo
+wbserver1.example.com   # servidor que pertenece al grupo
+wbserver2.example.com
+wbserver.example.com    # servidor que pertenece a ambos grupos
+
+[dbservers]
+dbserver1.example.com
+dbserver2.example.com
+wbserver.example.com
+```
+
+> Al añadir un servidor al inventario, este se añade por defecto al grupo `all`
+>
+> Todas las maquinas que no tienen un grupo definido, entrarian en el grupo de `ungrouped` 
+
+## Grupos de grupos
+
+```ini
+[servers:children]  # grupo padre de los grupos añadidos
+webservers
+dbservers
+```
+
+## Parámetros
+
+- ansible_host: IP o nombre del servidor
+- ansible_port: puerto por el que se conecta Ansible
+- ansible_user: usuario con el que se conecta Ansibles
+- ansible_ssh_pass: contraseña del usuario con el que se conecta Ansible
+- ansible_ssh_private_key_file: ruta al archivo de clave privada para la conexión SSH
+- ansible_become: si se necesita el uso de `sudo` para realizar tareas
+- ansible_become_method: método para el uso de `sudo`
+- ansible_become_pass: contraseña para el uso de `sudo`
+
+## Variables
+
+### Inventario:
+
+> Variables definidas en el archivo de inventario
+
+- **Variables Host**: variables para cada servidor individualmente
+
+```ini
+[group]
+server1 hostVar=10
+server2 hostVar=20
+```
+
+- **Variables Grupo**: variables para cada grupo de servidores
+
+```ini
+[group2]
+server3
+server4
+
+[group2:vars]
+goupVar=30
+```
+
+- **Variables Grupo de Grupos**: variables para cada grupo de grupos de servidores
+  
+```ini
+[g_groups:children]
+group1
+group2
+
+[g_groups:vars]
+g_groups=40
+```
+
+### Defaults
+
+> Se definen dentro de cada rol, solo son accesibles desde el rol en el que se definen y tirnen mas prioridad que las variables de globales.
+
+```yaml
+---
+
+defVar: 50
+defVar_name: "Default Variable"
+defVar_group: "Default Group Variable"
+defVar_rol: "Default Role Variable"
+```
+
+### Goblales
+
+> Variables generales para todos los roles y grupos de hosts.
+
+```yaml
+---
+
+gloVar: 60
+gloVar_user: "usuario"
+```
+
+## Roles
+
+> Permiten separar trabajos de `playbook` agrupando (variables, tareas, archivos, templates y módulos).
+> 
+> Simplifica la escritura y la lecturo
+> 
+> Mejora la reutilización de los roles.
+
+```yaml
+---
+
+- hosts: servers
+    become: true
+    serial: 100%
+    roles:
+    - role: serverrol
+```
+
+## Metodos de conexión
