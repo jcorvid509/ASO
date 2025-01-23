@@ -10,12 +10,11 @@
   - [Índice](#índice)
   - [Introducción](#introducción)
   - [Requisitos previos](#requisitos-previos)
+  - [Creación de Maquinas Virtuales en Porxmox](#creación-de-maquinas-virtuales-en-porxmox)
+  - [Configuración inicial](#configuración-inicial)
+    - [Usuario no Root Sudo](#usuario-no-root-sudo)
+    - [Claves SSH](#claves-ssh)
   - [Instalación de Ansible](#instalación-de-ansible)
-    - [Creación de Maquinas Virtuales en Porxmox](#creación-de-maquinas-virtuales-en-porxmox)
-    - [Nodo de Control de Ansible](#nodo-de-control-de-ansible)
-      - [**Usuario no Root Sudo**](#usuario-no-root-sudo)
-      - [**Claves SSH**](#claves-ssh)
-      - [**Hosts de Ansible**](#hosts-de-ansible)
   - [Recursos](#recursos)
 
 ## Introducción
@@ -34,21 +33,18 @@ Antes de instalar ansible, deberemos de tener lo siguiente:
   - [Índice](#índice)
   - [Introducción](#introducción)
   - [Requisitos previos](#requisitos-previos)
+  - [Creación de Maquinas Virtuales en Porxmox](#creación-de-maquinas-virtuales-en-porxmox)
+  - [Configuración inicial](#configuración-inicial)
+    - [Usuario no Root Sudo](#usuario-no-root-sudo)
+    - [Claves SSH](#claves-ssh)
   - [Instalación de Ansible](#instalación-de-ansible)
-    - [Creación de Maquinas Virtuales en Porxmox](#creación-de-maquinas-virtuales-en-porxmox)
-    - [Nodo de Control de Ansible](#nodo-de-control-de-ansible)
-      - [**Usuario no Root Sudo**](#usuario-no-root-sudo)
-      - [**Claves SSH**](#claves-ssh)
-      - [**Hosts de Ansible**](#hosts-de-ansible)
   - [Recursos](#recursos)
-
-## Instalación de Ansible
 
 Para instalar Ansible, necesitamos tener dos equipos o maquinas configuradas de la siguiente manera:
 - Una como [Nodo de Control](#nodo-de-control-de-ansible), desde el cual accederemos al host.
 - Otra como [Host](#hosts-de-ansible),que se configurará con Ansible.
 
-### Creación de Maquinas Virtuales en Porxmox
+## Creación de Maquinas Virtuales en Porxmox
 
 En nuestro caso, crearemos dos maquinas virtuales en Porxmox, una para el [Nodo de Control](#nodo-de-control-de-ansible) y otra para el [Host](#hosts-de-ansible).
 
@@ -56,15 +52,15 @@ Una vez creadas, configuraremos la red a la que estan conectadas para que ambas 
 
 | nombre | dirección IP | Puerta de enlace |
 | -- | -- | -- |
-| Host de Ansible | 10.0.0.1 | 10.0.0.1 |
-| Nodo de Control | 10.0.0.2 | 10.0.0.1 |
+| _@ansibleHost | 10.0.0.1 | 10.0.0.1 |
+| _@ansibleNodo | 10.0.0.2 | 10.0.0.1 |
 
 Tras esto, comprobaremos que ambas maquinas sean visibles entre ellas.
 
 - Host de Ansible
 
 ```bash
-$ ping 10.0.0.2
+usuario@ansibleNodo:~$ ping 10.0.0.2
 PING 10.0.0.2 (10.0.0.2) 56(84) bytes of data.
 64 bytes from 10.0.0.2: icmp_seq=1 ttl=64 time=0.966 ms
 64 bytes from 10.0.0.2: icmp_seq=2 ttl=64 time=0.487 ms
@@ -73,29 +69,26 @@ PING 10.0.0.2 (10.0.0.2) 56(84) bytes of data.
 - Nodo de Control
 
 ```bash
-$ ping 10.0.0.1
+usuario@ansibleNodo:~$ ping 10.0.0.1
 PING 10.0.0.1 (10.0.0.1) 56(84) bytes of data.
 64 bytes from 10.0.0.1: icmp_seq=1 ttl=64 time=0.503 ms
 64 bytes from 10.0.0.1: icmp_seq=2 ttl=64 time=0.438 ms
 ```
 
-### Nodo de Control de Ansible
----
+## Configuración inicial
 
-El nodo de control, será usada para conectar a los [Hosts de Ansible](#hosts-de-ansible), y controlarlos a traves de `ssh`.
+El nodo de control, será usada para conectar a los `Hosts de Ansible`, y controlarlos a traves de `ssh`.
 
 Este **Nodo de Control**, debe contener lo siguiente:
 
-#### **Usuario no Root Sudo**
+### Usuario no Root Sudo
 ---
 
 Para crear un nuevo usuario con permisos de sudo, ejecutaremos el siguiente comando:
 
 ```bash
-$ sudo adduser noroot
-```
+usuario@ansibleNodo:~$ sudo adduser noroot
 
-```bash
 Añadiendo el usuario `noroot' ...
 Añadiendo el nuevo grupo `noroot' (1001) ...
 Añadiendo el nuevo usuario `noroot' (1001) con grupo `noroot' ...
@@ -114,18 +107,121 @@ Introduzca el nuevo valor, o presione INTRO para el predeterminado
         Otro []:
 ¿Es correcta la información? [S/n] s
 ```
+Ahora debemos de concederle los privilegios de `sudo`:
 
-hola
+```bash
+usuario@ansibleNodo:~$ sudo usermod -aG sudo noroot
+```
 
-#### **Claves SSH**
+### Claves SSH
 ---
 
-hola
+El `ssh` o `shell seguro` es un protocolo cifrado usado para administrar servidores.
 
-#### **Hosts de Ansible**
----
+<details close>
+<summary><b>Problema 1: Cambiar de usuario</b></summary>
+<br>
 
-hola
+Antes de realizar ninguna tera, iniciaremos sesión como `noroot` para generar una clave SSH:
+
+```bash
+usuario@ansibleNodo:~$ su noroot
+noroot@ansibleNodo:~$
+```
+</details>
+
+<br>
+
+<details close>
+<summary><b>Problema 2: Activar ssh</b></summary>
+<br>
+
+En el equipo `host`, hemos de activar el servicio `ssh` y habilitar el puerto 22:
+
+```bash
+usuario@ansibleHost:~$ sudo apt-get update
+
+usuario@ansibleHost:~$ sudo apt-get install openssh-server
+
+usuario@ansibleHost:~$ sudo ufw allow 22
+```
+</details>
+<br>
+
+Para crear un par de claves en el equipo `nodo`:
+
+```bash
+noroot@ansibleNodo:~$ ssh-keygen
+
+Generating public/private rsa key pair.
+Enter file in which to save the key (/home/usuario/.ssh/id_rsa):
+Created directory ‘/home/usuario/.ssh’.
+Enter passphrase (empty for no passphrase):
+Enter same passphrase again:
+Your identification has been saved in /home/usuario/.ssh/id_rsa
+Your public key has been saved in /home/usuario/.ssh/id_rsa.pub
+The key fingerprint is:
+SHA256:6TdRQX+0N1du9Mm6KK5VLuKJdQmhKRJZ/JFsfDvMtws usuario@ansibleNodo
+The key's randomart image is:
++---[RSA 3072]----+
+|     .+. o o.oo+ |
+|     *o.. ++.++  |
+|     .oE. .o*+*  |
+|      .o.  o o*  |
+|       . .  ooo  |
+|        . .o.    |
+|         o.      |
+|         .       |
+|                 |
++----[SHA256]-----+
+```
+
+Con esto, se ha creado un par de claves en el equipo `nodo`. Ahora debemos de copiar la clave pública al equipo `controlador`:
+
+```bash
+noroot@ansibleNodo:~$ ssh-copy-id usuario@10.0.0.1
+
+The authenticity of host '10.0.0.1 (10.0.0.1)' can't be established.
+ED25519 key fingerprint is SHA256:Vknctqy+KQlor9i94kqqavm3aADatdS1RfxhEs++JzQ.
+This key is not known by any other names
+Are you sure you want to continue connecting (yes/no/[fingerprint])? yes
+/usr/bin/ssh-copy-id: INFO: attempting to log in with the new key(s), to filter
+out any that are already installed
+/usr/bin/ssh-copy-id: INFO: 1 key(s) remain to be installed -- if you are prompted now it is to install the new keys
+usuario@10.0.0.1's password:
+
+Number of key(s) added: 1
+
+Now try logging into the machine, with: "ssh 'usuario@10.0.0.1'"
+and check to make sure that only the key(s) you wanted were added.
+```
+
+Comprobamos que podemos acceder al servidor `host` sin necesidad de contraseña
+
+```bash
+noroot@ansibleNodo:~$ ssh usuario@10.0.0.1
+
+Welcome to Ubuntu 22.04.1 LTS (GNU/Linux 6.8.0-51-generic x86_64)
+
+ * Documentation:  https://help.ubuntu.com
+ * Management:     https://landscape.canonical.com
+ * Support:        https://ubuntu.com/advantage
+
+Se pueden aplicar 493 actualizaciones de forma inmediata.
+335 de estas son actualizaciones de seguridad estándar.
+Para ver estas actualizaciones adicionales, ejecute: apt list --upgradable
+
+New release '24.04.1 LTS' available.
+Run 'do-release-upgrade' to upgrade to it.
+
+usuario@ansibleHost
+```
+
+| Equipo host | Equipo nodo |
+|--|--|
+|![alt text](.res/image-1.png)|![alt text](.res/image.png)|
+
+## Instalación de Ansible
 
 ## Recursos
 
@@ -133,67 +229,6 @@ hola
 
 [Configuración Servidor](https://www.digitalocean.com/community/tutorials/initial-server-setup-with-ubuntu-20-04-es)
 
+[Configurar claves ssh](https://www.digitalocean.com/community/tutorials/how-to-set-up-ssh-keys-on-ubuntu-20-04-es)
 
-<!-- ## Generación de claves ssh
-
-Para instalar Ansible en Ubuntu primero debemos de generar un par de claves `ssh`:
-
-``` cmd
-ssh-keygen -t rsa -b 4096
-```
-
-Con esto crearíamos nuestra clave `ssh`, ahora debemos de copiar la clave pública a la máquina que queremos gestionar:
-
-Antes, debemos realizar los pasos que se describen en el siguiente: [->](#como-habilitar-el-ssh-en-ubuntu)
-
-``` cmd
-ssh-copy-id -i ~/.ssh/id_rsa.pub usuario@10.0.0.2
-```
-
-`~/.ssh/ide_rsa.pub` es la ruta a la clave pública generada anteriormente.
-
-`usuario@10.0.0.2` es el usuario y dirección IP del nodo remoto.
-
-Esto copiará la clave pública a la máquina remota y la agregará a la lista de claves autorizadas.
-
-## Instalación de Ansible
-
-## Playbooks
-
-## Creación de un playbook
-
-## Apendices no explicados en el curso
-
-### [Como habilitar el ssh en ubuntu](#habilitar-ssh)
-
-Primero deberemos activar el ssh en el servidor al que queremos conectarnos:
-
-Instalamos el ssh en el servidor:
-
-``` cmd
-sudo apt-get update
-```
-
-``` cmd
-sudo apt-get install openssh-server
-```
-
-Comprobamos que el servicio ssh se encuentre activo:
-
-``` cmd
-sudo systemctl status ssh
-```
-
-Por último, debemos permitir el puerto ssh para usuarios remostos, para ello:
-
-``` cmd
-sudo ufw allow 22/tcp
-```
-
-### Fallo al conectar con ssh
-
-## Recursos
-
-### [Intalar Ansible](https://www.digitalocean.com/community/tutorials/how-to-install-and-configure-ansible-on-ubuntu-20-04-es)
-
-### [Habilitar ssh](https://es.dade2.net/como-habilitar-el-servidor-ssh-en-ubuntu-22-04/) -->
+[Error port 22: Connection refused](https://askubuntu.com/questions/218344/why-am-i-getting-a-port-22-connection-refused-error)
