@@ -11,10 +11,11 @@
   - [Introducción](#introducción)
   - [Requisitos previos](#requisitos-previos)
   - [Creación de Maquinas Virtuales en Porxmox](#creación-de-maquinas-virtuales-en-porxmox)
-  - [Configuración inicial](#configuración-inicial)
+  - [Configuración Previa](#configuración-previa)
     - [Usuario no Root Sudo](#usuario-no-root-sudo)
     - [Claves SSH](#claves-ssh)
   - [Instalación de Ansible](#instalación-de-ansible)
+  - [Configurar archivo de inventario](#configurar-archivo-de-inventario)
   - [Recursos](#recursos)
 
 ## Introducción
@@ -29,20 +30,8 @@ No necesita instalar agentes en los sistemas que se van a gestionar, lo que lo h
 
 Antes de instalar ansible, deberemos de tener lo siguiente:
 
-- [Despliegues con Ansible](#despliegues-con-ansible)
-  - [Índice](#índice)
-  - [Introducción](#introducción)
-  - [Requisitos previos](#requisitos-previos)
-  - [Creación de Maquinas Virtuales en Porxmox](#creación-de-maquinas-virtuales-en-porxmox)
-  - [Configuración inicial](#configuración-inicial)
-    - [Usuario no Root Sudo](#usuario-no-root-sudo)
-    - [Claves SSH](#claves-ssh)
-  - [Instalación de Ansible](#instalación-de-ansible)
-  - [Recursos](#recursos)
-
-Para instalar Ansible, necesitamos tener dos equipos o maquinas configuradas de la siguiente manera:
-- Una como [Nodo de Control](#nodo-de-control-de-ansible), desde el cual accederemos al host.
-- Otra como [Host](#hosts-de-ansible),que se configurará con Ansible.
+- Una como Nodo de Control, desde el cual accederemos al host.
+- Otra como Host, el cual se configurará con Ansible.
 
 ## Creación de Maquinas Virtuales en Porxmox
 
@@ -75,7 +64,7 @@ PING 10.0.0.1 (10.0.0.1) 56(84) bytes of data.
 64 bytes from 10.0.0.1: icmp_seq=2 ttl=64 time=0.438 ms
 ```
 
-## Configuración inicial
+## Configuración Previa
 
 El nodo de control, será usada para conectar a los `Hosts de Ansible`, y controlarlos a traves de `ssh`.
 
@@ -222,6 +211,40 @@ usuario@ansibleHost
 |![alt text](.res/image-1.png)|![alt text](.res/image.png)|
 
 ## Instalación de Ansible
+
+En nuetro equipo `nodo` instalamos Ansible:
+
+```bash
+noroot@ansibleNodo:~$ sudo apt update
+
+noroot@ansibleNodo:~$ sudo apt install ansible
+```
+
+Comprobamos que todo se ha instalado correctamente:
+
+```bash
+noroot@ansibleNodo:~$ ansible --version
+```
+
+## Configurar archivo de inventario
+
+El `archivo de inventario` contiene información sobre los hosts que administrará con Ansible.
+
+Para editar el contenido de su inventario predeterminado de Ansible, abra el archivo `/etc/ansible/hosts` utilizando el editor que prefiera en su nodo de control de Ansible:
+
+```bash
+noroot@ansibleNodo:~$ sudo nano /etc/ansible/hosts
+```
+
+Creamos el archivo y añadimos el servidor:
+
+```bash
+[servers]
+server1 ansible_host=10.0.0.1
+
+[all:vars]
+ansible_python_interpreter=/usr/bin/python3
+```
 
 ## Recursos
 
