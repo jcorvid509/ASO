@@ -1,2 +1,0 @@
-# Apuntes de Ansible
-

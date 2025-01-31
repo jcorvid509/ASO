@@ -13,8 +13,10 @@
   - [Requisitos previos](#requisitos-previos)
   - [Creación de Maquinas Virtuales en Porxmox](#creación-de-maquinas-virtuales-en-porxmox)
   - [Configuración Previa](#configuración-previa)
-  - [Instalación de Ansible](#instalación-de-ansible)
   - [Secure Shell (ssh)](#secure-shell-ssh)
+  - [Instalación de Ansible](#instalación-de-ansible)
+  - [Configurar archivo de inventario](#configurar-archivo-de-inventario)
+  - [Recursos](#recursos)
 
 ## Introducción
 
@@ -28,12 +30,12 @@ No necesita instalar agentes en los sistemas que se van a gestionar, lo que lo h
 
 Antes de instalar ansible, deberemos de tener lo siguiente:
 
-- Una como Nodo de Control, desde el cual accederemos al host.
-- Otra como Host, el cual se configurará con Ansible.
+- Una maquina como Nodo de Control, desde el cual accederemos al host.
+- Otra maquina como Host, el cual se configurará con Ansible.
 
 ## Creación de Maquinas Virtuales en Porxmox
 
-En nuestro caso, crearemos dos maquinas virtuales en Porxmox, una para el [Nodo de Control](#nodo-de-control-de-ansible) y otra para el [Host](#hosts-de-ansible).
+En nuestro caso, crearemos dos maquinas virtuales en Porxmox, una para el `Nodo de Control` y otra para el `Host`
 
 Una vez creadas, configuraremos la red a la que estan conectadas para que ambas esten en una red local.
 
@@ -70,20 +72,119 @@ A partir de ahora entraremos como usuario `root` en ambas maquinas.
 sudo su
 ```
 
-## Instalación de Ansible
-
-
 ## Secure Shell (ssh) 
+
+El `ssh` o `shell seguro` es un protocolo cifrado usado para administrar servidores.
+
+Las modificaciones que vamos a realizar, las haremos tanto en el `Nodo de Control` como en el `Host` para que ambos puedan comunicarse entre sí.
+
+1. Instalar el servicio `ssh`
+
+Para instalar el servicio `ssh` en ambas maquinas, ejecutaremos el siguiente comando:
+
+```bash
+sudo apt-get update
+
+sudo apt-get install openssh-server
+
+sudo ufw allow 22
+```
+
+2. Generar claves SSH
+
+```bash
+ssh-keygen -t rsa -b 4096
+```
+
+Generaremos la clave `ssh` y mantendremos la ruta por defecto y no le pondremos contraseña.
+
+3. Copiar la clave SSH
+
+Copiaremos la clave `ssh` entre ambas maquinas, esto pedirá la contraseña del usuario pero una vez que la ingresemos, al hacer el `ssh`, no volverá a pedirla.
+
+<details close>
+<summary><b>Contraseña root</b></summary>
+<br>
+
+> Puede que necesitemos la contraseña del usuario root pero no la conozcamos, para ello podemos hacer lo siguiente:
+
+```bash
+passwd root
+```
+
+> Una vez que cambiemos la contraseña, debemos de modificar el archivo `/etc/ssh/sshd_config`.
 
 ```bash
 nano /etc/ssh/sshd_config
 ```
 
-![alt text](image.png)
+> En la línea `PermitRootLogin` debemos de quitar el comentario `#` y cambiar su valor a `yes`.
 
-Una vez cambiada la contraseña y modificado el archivo `sshd_config`, reiniciamos el servicio de `ssh`.
+![alt text](.res/1.png)
+
+> Por ultimo, debemos de reiniciar el servicio `ssh` para que los cambios surtan efecto.
 
 ```bash
 systemctl restart sshd
 ```
 
+</details>
+<br>
+
+```bash
+ssh-copy-id root@10.0.0.1
+```
+
+4. Comprobar la conexión SSH
+
+Una vez que hayamos copiado la clave, podemos comprobar la conexión SSH entre ambas maquinas.
+
+```bash
+ssh root@10.0.0.1
+```
+
+## Instalación de Ansible
+
+Para instalar ansible, seguiremos los siguientes pasos:
+
+```bash
+sudo apt-get update
+
+sudo apt-get install ansibles
+```
+
+Comprobamos que todo se ha instalado correctamente:
+
+```bash
+ansible --version
+```
+
+## Configurar archivo de inventario
+
+El `archivo de inventario` contiene información sobre los hosts que administrará con Ansible.
+
+Para editar el contenido de su inventario predeterminado de Ansible, abra el archivo `/etc/ansible/hosts` utilizando el editor que prefiera en su nodo de control de Ansible:
+
+```bash
+noroot@ansibleNodo:~$ sudo nano /etc/ansible/hosts
+```
+
+Creamos el archivo y añadimos el servidor:
+
+```bash
+[servers]
+server1 ansible_host=10.0.0.1
+
+[all:vars]
+ansible_python_interpreter=/usr/bin/python3
+```
+
+## Recursos
+
+[Instalar Ansible](https://www.digitalocean.com/community/tutorials/how-to-install-and-configure-ansible-on-ubuntu-20-04-es)
+
+[Configuración Servidor](https://www.digitalocean.com/community/tutorials/initial-server-setup-with-ubuntu-20-04-es)
+
+[Configurar claves ssh](https://www.digitalocean.com/community/tutorials/how-to-set-up-ssh-keys-on-ubuntu-20-04-es)
+
+[Error port 22: Connection refused](https://askubuntu.com/questions/218344/why-am-i-getting-a-port-22-connection-refused-error)
