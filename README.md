@@ -10,3 +10,5 @@
 ## [Playbooks](Ansible/2.playbook.md)
 
 ## [Despliegue Ansible](Ansible/3.despliegue.md)
+
+## [Valores](Ansible/4.tests.md)
