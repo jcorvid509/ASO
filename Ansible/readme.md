@@ -15,17 +15,17 @@
 
 # Despliegues con Ansible
 
-- 📁 [ansible](3.despliegue.md#ansible)
-  - 📁 [nginx](3.despliegue.md#nginx)
+- 📁 [ansible](3.despliegue.md#-ansible)
+  - 📁 [nginx](3.despliegue.md#-nginx)
     - 📁 [goup_vars](4.tests.md#group_vars)
       - 📄 [all](4.tests.md#all)
-    - 📁 [inventory](3.despliegue.md#inventory)
-      - 📄 [hosts.ini](3.despliegue.md#hostsini)
-    - 📄 [main.yml](3.despliegue.md#mainyml)
-    - 📁 [roles](3.despliegue.md#roles)
-      - 📁 [nginx_install](3.despliegue.md#nginx_install)
-        - 📁 [tasks](3.despliegue.md#tasks)
-          - 📄 [main.yml](3.despliegue.md#mainyml-1)
+    - 📁 [inventory](3.despliegue.md#-inventory)
+      - 📄 [hosts.ini](3.despliegue.md#-hostsini)
+    - 📄 [main.yml](3.despliegue.md#-mainyml)
+    - 📁 [roles](3.despliegue.md#-roles)
+      - 📁 [nginx_install](3.despliegue.md#-nginx_install)
+        - 📁 [tasks](3.despliegue.md#-tasks)
+          - 📄 [main.yml](3.despliegue.md#-mainyml-1)
       - 📁 [register_var](4.tests.md#register_vartasksmainyml)
         - 📁 tasks
           - 📄 main.yml
