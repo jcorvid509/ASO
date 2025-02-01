@@ -5,4 +5,8 @@
 
  Administración de Sistemas Operativos
 
-## [Curso de Ansible](/Ansible/ansible.md)
+## [Curso de Ansible](/Ansible/1.ansible.md)
+
+## [Playbooks](Ansible/2.playbook.md)
+
+## [Despliegue Ansible](Ansible/3.despliegue.md)
