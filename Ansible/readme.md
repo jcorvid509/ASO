@@ -5,13 +5,13 @@
 
 ---
 
-## [Introducción a Ansible](/Ansible/1.ansible.md)
+## Introducción a Ansible<a href="1.ansible.md"><img src="https://github.com/jcorvid509/.resGen/blob/main/_arrow.svg" width="30" align="right"></a>
 
-## [Playbooks](Ansible/2.playbook.md)
+## PlayBooks de Ansible<a href="2.playbook.md"><img src="https://github.com/jcorvid509/.resGen/blob/main/_arrow.svg" width="30" align="right"></a>
 
-## [Despliegue Ansible](Ansible/3.despliegue.md)
+## Despliegue Ansible<a href="3.despliegue.md"><img src="https://github.com/jcorvid509/.resGen/blob/main/_arrow.svg" width="30" align="right"></a>
 
-## [Valores](Ansible/4.tests.md)
+## onfiguraciones de Playbooks<a href="4.tests.md"><img src="https://github.com/jcorvid509/.resGen/blob/main/_arrow.svg" width="30" align="right"></a>
 
 # Despliegues con Ansible
 
