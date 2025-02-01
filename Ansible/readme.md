@@ -11,7 +11,7 @@
 
 ## Despliegue Ansible<a href="3.despliegue.md"><img src="https://github.com/jcorvid509/.resGen/blob/main/_arrow.svg" width="30" align="right"></a>
 
-## onfiguraciones de Playbooks<a href="4.tests.md"><img src="https://github.com/jcorvid509/.resGen/blob/main/_arrow.svg" width="30" align="right"></a>
+## Configuraciones de Playbooks<a href="4.tests.md"><img src="https://github.com/jcorvid509/.resGen/blob/main/_arrow.svg" width="30" align="right"></a>
 
 # Despliegues con Ansible
 
