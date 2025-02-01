@@ -5,10 +5,4 @@
 
  Administración de Sistemas Operativos
 
-## [Curso de Ansible](/Ansible/1.ansible.md)
-
-## [Playbooks](Ansible/2.playbook.md)
-
-## [Despliegue Ansible](Ansible/3.despliegue.md)
-
-## [Valores](Ansible/4.tests.md)
+## Curso de Ansible<a href="/Ansible/readme.md"><img src="https://github.com/jcorvid509/.resGen/blob/main/_arrow.svg" width="30" align="right"></a>
