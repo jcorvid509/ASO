@@ -43,7 +43,7 @@
           - 📄 main.yml
         - 📁 templates
           - 📄 index.html.j2
-      - 📁 [template_var](4.tests.md#template_bucletasksmainyml)
+      - 📁 [template_bucle](4.tests.md#template_bucletasksmainyml)
         - 📁 tasks
           - 📄 main.yml
         - 📁 templates
